@@ -167,7 +167,11 @@ sub doctype {
     $URI    &&= qq("$URI");
     $subset &&= "[ $subset ]";
 
-    join( ' ', grep defined $_, '<!DOCTYPE', $root, $pubID ? ('PUBLIC', $pubID, $URI) : $URI && ('SYSTEM', $URI), $subset ) . '>';
+    join( ' ', grep defined $_,
+        '<!DOCTYPE', $root,
+        $pubID ? ('PUBLIC', $pubID, $URI) : $URI && ('SYSTEM', $URI),
+        $subset
+    ) . '>';
 }
 
 =head1 EXAMPLES
