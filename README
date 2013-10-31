@@ -1,9 +1,9 @@
-HTML-FromArrayref
+XML-FromArrayref
 
-The previously existing HTML generation modules, such as HTML:LoL, don't
-make it easy to programmatically skip a tag or an attribute, so here's a
-simple module that takes a list of arrayrefs and renders them as HTML
-elements, replacing any whose tag names are false with their contents.
+The previously existing XML generation modules, such as XML::Writer, aren't
+really that expressive or concise in use, so here's a simple module that
+takes a list of arrayrefs and renders them as XML elements, replacing any
+whose tag names are false with their contents.
 
 
 INSTALLATION
@@ -20,21 +20,21 @@ SUPPORT AND DOCUMENTATION
 After installing, you can find documentation for this module with the
 perldoc command.
 
-    perldoc HTML::FromArrayref
+    perldoc XML::FromArrayref
 
 You can also look for information at:
 
     RT, CPAN's request tracker (report bugs here)
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=HTML-FromArrayref
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=XML-FromArrayref
 
     AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/HTML-FromArrayref
+        http://annocpan.org/dist/XML-FromArrayref
 
     CPAN Ratings
-        http://cpanratings.perl.org/d/HTML-FromArrayref
+        http://cpanratings.perl.org/d/XML-FromArrayref
 
     Search CPAN
-        http://search.cpan.org/dist/HTML-FromArrayref/
+        http://search.cpan.org/dist/XML-FromArrayref/
 
 
 LICENSE AND COPYRIGHT
