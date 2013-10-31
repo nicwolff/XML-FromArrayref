@@ -2,7 +2,7 @@
 
 use Test::More tests => 4;
 
-BEGIN { use_ok('HTML::FromArrayref', ':TAGS'); }
+BEGIN { use_ok('XML::FromArrayref', ':TAGS'); }
 
 is(
 	start_tag( 'div' ),

@@ -2,9 +2,7 @@
 
 use Test::More;
 
-BEGIN { use_ok('XML::FromArrayref', 'XML', ':TAGS', ':PROLOG'); }
-
-is( XMLdecl(), '<?xml version="1.0" encoding="UTF-8"?>', 'prints an XML declaration' );
+BEGIN { use_ok('XML::FromArrayref', 'XML', ':TAGS'); }
 
 is(
 	XML( [ p => 'foo' ] ),
