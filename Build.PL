@@ -14,6 +14,7 @@ my $builder = Module::Build->new(
     requires => {
         'perl' => 5.006,
 	'HTML::Entities' => 0,
+	'URI::Escape' => 0,
     },
     add_to_cleanup      => [ 'XML-FromArrayref-*' ],
     create_makefile_pl => 'traditional',

@@ -13,6 +13,7 @@ our %EXPORT_TAGS = (
 );
 
 use HTML::Entities;
+use URI::Escape;
 
 =head1 NAME
 
@@ -71,11 +72,6 @@ Recursively renders XML elements from arrayrefs
 
 =cut
 
-my %void; @void{ qw(
-	area base br col command embed hr img input
-	keygen link meta param source track wbr
-) } = (1)x16;
-
 sub element {
 	my ( $tag_name, $attributes, @content ) = @_;
 
@@ -97,8 +93,8 @@ sub element {
 	# Return the element start tag with its formatted and
 	# encoded attributes, and (optionally) content and
 	# end tag
-	join '', '<', $tag_name, attributes( %$attributes ), '>',
-		! $void{ lc $tag_name } && ( XML( @content ), "</$tag_name>" );
+	join '', '<', $tag_name, attributes( %$attributes ),
+        @content ? ( '>', XML( @content ), "</$tag_name>" ) : '/>'
 }
 
 =head2 start_tag()
@@ -141,7 +137,7 @@ sub attributes {
 	join ' ', '', @html;
 }
 
-=head2 XMLDECL
+=head2 XMLdecl()
 
 This makes it easy to add a valid XML declaration to your document
 
@@ -153,22 +149,25 @@ sub XMLdecl {
     $version  ||= '1.0';
     $encoding ||= 'UTF-8';
 
-    join '',
-        '<?xml',
-        attributes( version => $version, encoding => $encoding, standalone => $standalone ),
-        '?>';
+    join '', '<?xml', attributes( version => $version, encoding => $encoding, standalone => $standalone ), '?>';
 }
 
-=head2 DOCTYPE
+=head2 doctype()
 
 This makes it easy to add a valid doctype declaration to your document
 
 =cut
 
 sub doctype {
-    my ( $name, $encoding ) = @_;
+    my ( $root, $pubID, $URI, $subset ) = @_;
 
-    join '', '<?xml', attributes( version => $version, encoding => $encoding ), '?>';
+    $root   ||= 'XML';
+    $pubID  &&= qq("$pubID");
+    $URI    &&= uri_escape( $URI, '\x0-\x1F\x7F-\xFF <>"{}|\^``"' );
+    $URI    &&= qq("$URI");
+    $subset &&= "[ $subset ]";
+
+    join( ' ', grep defined $_, '<!DOCTYPE', $root, $pubID ? ('PUBLIC', $pubID, $URI) : $URI && ('SYSTEM', $URI), $subset ) . '>';
 }
 
 =head1 EXAMPLES
