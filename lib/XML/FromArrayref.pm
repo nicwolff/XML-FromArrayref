@@ -68,7 +68,7 @@ sub XML (@) {
 
 =head2 element()
 
-Recursively renders XML elements from arrayrefs
+Recursively renders XML elements from arrayrefs.
 
 =cut
 
@@ -120,7 +120,7 @@ sub end_tag { "</$_[0]>" }
 
 =head2 attributes()
 
-Takes a hash of XML element attributes and returns an encoded string for use in a tag
+Takes a hash of XML element attributes and returns an encoded string for use in a tag.
 
 =cut
 
@@ -139,7 +139,7 @@ sub attributes {
 
 =head2 XMLdecl()
 
-This makes it easy to add a valid XML declaration to your document
+This makes it easy to add a valid XML declaration to your document.
 
 =cut
 
@@ -154,7 +154,7 @@ sub XMLdecl {
 
 =head2 doctype()
 
-This makes it easy to add a valid doctype declaration to your document
+This makes it easy to add a valid doctype declaration to your document.
 
 =cut
 
