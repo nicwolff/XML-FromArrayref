@@ -3,7 +3,7 @@
 use Test::More tests => 1;
 
 BEGIN {
-	use_ok( 'HTML::FromArrayref' ) || print "Bail out!\n";
+	use_ok( 'XML::FromArrayref' ) || print "Bail out!\n";
 }
 
-diag( "Testing HTML::FromArrayref $HTML::FromArrayref::VERSION, Perl $], $^X" );
+diag( "Testing XML::FromArrayref $XML::FromArrayref::VERSION, Perl $], $^X" );
