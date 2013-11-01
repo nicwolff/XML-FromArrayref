@@ -159,12 +159,12 @@ This makes it easy to add a valid doctype declaration to your document.
 =cut
 
 sub doctype {
-    my ( $root, $pubID, $URI, $subset ) = @_;
+    my ( $root, $URI, $pubID, $subset ) = @_;
 
     $root   ||= 'XML';
-    $pubID  &&= qq("$pubID");
     $URI    &&= uri_escape( $URI, '\x0-\x1F\x7F-\xFF <>"{}|\^``"' );
     $URI    &&= qq("$URI");
+    $pubID  &&= qq("$pubID");
     $subset &&= "[ $subset ]";
 
     join( ' ', grep defined $_,
