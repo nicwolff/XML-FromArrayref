@@ -46,7 +46,7 @@ Takes a list of strings and arrayrefs describing XML content and returns the XML
 
 =head3 $tag_name
 
-evaluates to a tag name such as 'html', 'head', 'title', 'body', 'table', 'tr', 'td', 'p', &c. If $tag_name is false then the whole element is replaced by its content.
+evaluates to an XML tag name. If $tag_name is false then the whole element is replaced by its content.
 
 If an arrayref's first element is another arrayref instead of an tag name, then the value of the first item of that array will be included in the XML string but will not be encoded. This lets you include text in the XML that has already been entity-encoded.
 
@@ -56,7 +56,7 @@ is an optional hashref defining the element's attributes. If an attribute's valu
 
 =head3 @content
 
-is another list of strings and arrayrefs, which will be used to generate the content of the element. If the content list is empty, then the element has no content and will be represented in the generated XML string by a single empty-element tag. 
+is another list of strings and arrayrefs, which will be used to generate the content of the element. If the content list is empty, then the element has no content and will be represented in the generated XML string by a single empty-element tag.
 
 =cut
 
@@ -90,9 +90,9 @@ sub element {
 	# the element and return its content instead
 	return XML( @content ) if not $tag_name;
 
-	# Return the element start tag with its formatted and
-	# encoded attributes, and (optionally) content and
-	# end tag
+	# Return the element start tag, with its formatted and
+	# encoded attributes, and the content and end tag; or,
+	# if no content, a self-closing empty element
 	join '', '<', $tag_name, attributes( %$attributes ),
         @content ? ( '>', XML( @content ), "</$tag_name>" ) : '/>'
 }
@@ -192,59 +192,109 @@ would print
 
 If an element's name is an arrayref, its first item is printed without being encoded; this lets you include text that is already encoded by double-bracketing it:
 
-  print XML [ p => [[ '&copy; Angel Networks&trade;' ]] ];
+  print XML [ copyright => [[ '&copy; Angel Networks&trade;' ]] ];
 
 would print
 
-  <p>&copy; Angel Networks&trade;</p>
+  <copyright>&copy; Angel Networks&trade;</copyright>
 
 =head2 Using map to iterate, and optional elements
 
 You can map any element over a list to iterate it, and by testing the value being mapped over can wrap some values in sub-elements:
 
-  print XML map [ p => [ $_ > 100 && 'b' => $_ ] ], 4, 450, 12, 44, 74, 102;
+  print XML map [ number => [ $_ > 100 && 'large' => $_ ] ], 4, 450, 12, 44, 74, 102;
 
 would print
 
-  <p>4</p>
-  <p><b>450</b></p>
-  <p>12</p>
-  <p>44</p>
-  <p>74</p>
-  <p><b>102</b></p>
+  <number>4<number>
+  <number><large>450</large></number>
+  <number>12</number>
+  <number>44</number>
+  <number>74</number>
+  <number><b>102</b></number>
 
 =head2 Optional attributes
 
 Similarly, by testing the value being mapped over in the attributes hash, you can set an attribute for only some values. Note that you have to explicitly return undef to skip the attribute since 0 is a valid value for an attribute.
 
-  print XML [ select => { name => 'State' },
+  print XML [ states =>
     map
-      [ option => { selected => $_ eq $c{state} || undef }, $_ ],
+      [ state => { selected => $_ eq $c{state} || undef }, $_ ],
       @states
   ];
 
 would print
 
-  <select name="State">
-    <option>Alabama</option>
-    <option selected="1">Alaska</option>
-    <option>Arkansas</option>
+  <states>
+    <state>Alabama</state>
+    <state selected="1">Alaska</state>
+    <state>Arkansas</state>
     ...
-  </select>
+  </state>
 
 assuming $c{state} equalled 'Alaska'.
 
 =head2 Printing XML tags one at a time
 
-Sometimes you really don't want to build the whole page before printing it; you'd rather loop through some data and print an element at a time. The start_tag and end_tag functions will help you do this:
+Sometimes you really don't want to build the whole document before printing it; you'd rather loop through some data and print an element at a time. The start_tag and end_tag functions will help you do this:
 
-  print start_tag( [ td => { colspan => 3 } ] );
-  print end_tag( 'td' );
+  print start_tag( [ document => { columns => 3 } ] );
+  print end_tag( 'document' );
 
 would print
 
-  <td colspan="3">
-  </td>
+  <document columns="3">
+  </document>
+
+=head2 XML declaration
+
+You can print an XML declaration with the XMLdecl() function.
+
+  print XMLdecl();
+
+would print the default XML declaration
+
+  <?xml version="1.0" encoding="UTF-8"?>
+
+but you can change the version and encoding by passing up to two arguments:
+
+  print XMLdecl('1.1', 'CP-1252');
+
+would print
+
+  <?xml version="1.1" encoding="CP-1252"?>
+
+=head2 Doctyoe
+
+The doctype() function can be called without arguments to print a default doctype:
+
+  print doctype();
+
+  <!DOCTYPE XML>
+
+or with one argument to set the root element name:
+
+  print doctype('html');
+
+  <!DOCTYPE html>
+
+The second argument, if defined, is a URI; if no third argument is given, then it's printed as a private SYSTEM URI:
+
+  print doctype('transaction', 'http://example.com/transaction.dtd');
+
+  <!DOCTYPE transaction SYSTEM "http://example.com/transaction.dtd">
+
+The third argument, if defined, is a public ID which will make the doctype public:
+
+  print doctype('HTML', 'http://www.w3.org/TR/html4/strict.dtd', '-//W3C//DTD HTML 4.01//EN');
+
+  <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+Finally, if a fourth argument is given, it's a internal subset, which could contain markup declarations for entities, elements, &c.
+
+  print doctype('transaction', undef, undef, '<!ELEMENT description (#PCDATA)>' );
+
+  <!DOCTYPE transaction [ <!ELEMENT description (#PCDATA)> ]>
 
 =head1 SEE ALSO
 
