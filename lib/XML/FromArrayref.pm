@@ -202,7 +202,7 @@ would print
 
 You can map any element over a list to iterate it, and by testing the value being mapped over can wrap some values in sub-elements:
 
-  print XML map [ number => [ $_ > 100 && 'large' => $_ ] ], 4, 450, 12, 44, 74, 102;
+  print XML map [ number => [ $_ > 100 && large => $_ ] ], 4, 450, 12, 44, 74, 102;
 
 would print
 
