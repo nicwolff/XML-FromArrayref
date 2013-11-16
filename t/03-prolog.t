@@ -4,7 +4,9 @@ use Test::More;
 
 BEGIN { use_ok('XML::FromArrayref', 'XML', ':PROLOG'); }
 
-is( XMLdecl(), '<?xml version="1.0" encoding="UTF-8"?>', 'prints an XML declaration' );
+is( XMLdecl(), '<?xml version="1.0"?>', 'prints a default XML declaration' );
+
+is( XMLdecl('1.1'), '<?xml version="1.1"?>', 'can set version of XML declaration' );
 
 is(
     XMLdecl('1.2', 'CP-1252'),

@@ -147,7 +147,6 @@ sub XMLdecl {
     my ( $version, $encoding, $standalone ) = @_;
 
     $version  ||= '1.0';
-    $encoding ||= 'UTF-8';
 
     join '', '<?xml', attributes( version => $version, encoding => $encoding, standalone => $standalone ), '?>';
 }
