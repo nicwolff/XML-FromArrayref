@@ -126,12 +126,12 @@ Takes a hash of XML element attributes and returns an encoded string for use in 
 
 sub attributes {
 
-	return unless my %attributes = @_;
+	return unless my @attributes = @_;
 
 	my @html;
-	for ( keys %attributes ) {
-		if ( defined $attributes{$_} ) {
-			push @html, join '', $_, '="', encode_entities( $attributes{$_}, '&<"' ), '"';
+	while ( my ($name, $value) = splice @attributes, 0, 2 ) {
+		if ( defined $value ) {
+			push @html, join '', $name, '="', encode_entities( $value, '&<"' ), '"';
 		}
 	}
 	join ' ', '', @html;
