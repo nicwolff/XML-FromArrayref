@@ -210,7 +210,7 @@ would print
   <number>12</number>
   <number>44</number>
   <number>74</number>
-  <number><b>102</b></number>
+  <number><large>102</large></number>
 
 =head2 Optional attributes
 
